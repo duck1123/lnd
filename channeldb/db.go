@@ -490,7 +490,6 @@ func (d *DB) FetchClosedChannels(pendingOnly bool) ([]*ChannelCloseSummary, erro
 				return nil
 			}
 
-			log.Infof("checking channel of txid %v", chanSummary.ClosingTXID)
 			if chanSummary.ClosingTXID == *oldTXID {
 				log.Infof("modifying txid to be %v", newClosingTXID)
 				chanSummary.ClosingTXID = *newClosingTXID
@@ -548,7 +547,6 @@ func (d *DB) FetchClosedChannel(chanID *wire.OutPoint) (*ChannelCloseSummary, er
 		summaryReader := bytes.NewReader(summaryBytes)
 		chanSummary, err = deserializeCloseChannelSummary(summaryReader)
 
-		log.Infof("checking channel of txid %v", chanSummary.ClosingTXID)
 		if chanSummary.ClosingTXID == *oldTXID {
 			log.Infof("modifying txid to be %v", newClosingTXID)
 			chanSummary.ClosingTXID = *newClosingTXID
