@@ -862,8 +862,8 @@ out:
 		nextMsg, err := p.readNextMessage()
 		idleTimer.Stop()
 		if err != nil {
-			peerLog.Infof("unable to read message from %v: %v",
-				p, err)
+			// peerLog.Infof("unable to read message from %v: %v",
+			// 	p, err)
 
 			switch err.(type) {
 			// If this is just a message we don't yet recognize,
@@ -1467,8 +1467,8 @@ out:
 			p.activeChannels[chanID] = newChan
 			p.activeChanMtx.Unlock()
 
-			peerLog.Infof("New channel active ChannelPoint(%v) "+
-				"with NodeKey(%x)", chanPoint, p.PubKey())
+			// peerLog.Infof("New channel active ChannelPoint(%v) "+
+			// 	"with NodeKey(%x)", chanPoint, p.PubKey())
 
 			// Next, we'll assemble a ChannelLink along with the
 			// necessary items it needs to function.

@@ -1003,8 +1003,8 @@ func (d *AuthenticatedGossiper) networkHandler() {
 				continue
 			}
 
-			log.Infof("Broadcasting batch of %v new announcements",
-				len(announcementBatch))
+			// log.Infof("Broadcasting batch of %v new announcements",
+			// 	len(announcementBatch))
 
 			// If we have new things to announce then broadcast
 			// them to all our immediately connected peers.
