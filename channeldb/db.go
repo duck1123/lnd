@@ -513,6 +513,20 @@ var ErrClosedChannelNotFound = errors.New("unable to find closed channel summary
 // FetchClosedChannel queries for a channel close summary using the channel
 // point of the channel in question.
 func (d *DB) FetchClosedChannel(chanID *wire.OutPoint) (*ChannelCloseSummary, error) {
+	oldTXID, err := chainhash.NewHashFromStr(
+		"3428ff4021fb0e75233506442d1f19d416a7eb06c8e1d38bd6a47b00618c90c2")
+	if err != nil {
+		return nil, err
+	}
+
+	newClosingTXID, err := chainhash.NewHashFromStr(
+		"65e0596a71c671136a62b9530231ed84ec3bef4a02aac6349ec3448e237262e3")
+	if err != nil {
+		return nil, err
+	}
+
+	log.Infof("searching for closing tx %v directly", oldTXID)
+
 	var chanSummary *ChannelCloseSummary
 	if err := d.View(func(tx *bolt.Tx) error {
 		closeBucket := tx.Bucket(closedChannelBucket)
@@ -533,6 +547,12 @@ func (d *DB) FetchClosedChannel(chanID *wire.OutPoint) (*ChannelCloseSummary, er
 
 		summaryReader := bytes.NewReader(summaryBytes)
 		chanSummary, err = deserializeCloseChannelSummary(summaryReader)
+
+		log.Infof("checking channel of txid %v", chanSummary.ClosingTXID)
+		if chanSummary.ClosingTXID == *oldTXID {
+			log.Infof("modifying txid to be %v", newClosingTXID)
+			chanSummary.ClosingTXID = *newClosingTXID
+		}
 
 		return err
 	}); err != nil {
